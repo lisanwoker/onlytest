@@ -1,23 +1,25 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PWA Example</title>
-    <link rel="manifest" href="manifest.json">
+    <title>My PWA</title>
     <link rel="stylesheet" href="styles.css">
-    <script>
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function () {
-        navigator.serviceWorker.register('/repository-name/service-worker.js')
-            .then(reg => console.log("Service Worker registered!", reg))
-            .catch(err => console.log("Service Worker registration failed:", err));
-    });
-}
-    </script>
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
-    <h1>Welcome to PWA!</h1>
-    <p>This is a simple Progressive Web App.</p>
+    <!-- 로딩 화면 -->
+    <div id="loading-screen">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+    
+    <!-- 메인 콘텐츠 -->
+    <div id="content" class="hidden">
+        <h1>Welcome to My PWA</h1>
+        <button onclick="refreshPage()">새로고침</button>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
