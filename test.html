@@ -8,89 +8,97 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
+      background-color: black;
+      color: white;
       overflow: hidden;
     }
-    .refresh-bar {
-      position: fixed;
-      top: -60px;
+    .container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .refresh-area {
+      position: absolute;
+      top: -100px;
       left: 0;
-      right: 0;
-      height: 60px;
-      background-color: white;
+      width: 100%;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: black;
+      transition: height 0.3s ease;
+    }
+    .loading-icon {
+      width: 30px;
+      height: 30px;
+      border: 4px solid rgba(255, 255, 255, 0.2);
+      border-top: 4px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .content {
+      flex: 1;
+      width: 100%;
+      background-color: #121212;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 14px;
-      color: #555;
-      transition: transform 0.3s ease;
-    }
-    .spinner {
-      width: 24px;
-      height: 24px;
-      border: 3px solid rgba(0, 0, 0, 0.2);
-      border-top: 3px solid #555;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      display: none;
-    }
-    @keyframes spin {
-      from {
-        transform: rotate(0deg);
-      }
-      to {
-        transform: rotate(360deg);
-      }
-    }
-    .content {
-      min-height: 100vh;
-      background-color: white;
-      padding: 20px;
     }
   </style>
 </head>
 <body>
-  <div class="refresh-bar" id="refreshBar">
-    <div class="spinner" id="spinner"></div>
-    <span id="refreshText">당겨서 새로고침</span>
-  </div>
-  <div class="content">
-    <h1>당겨서 새로고침 구현</h1>
-    <p>페이지를 아래로 당겨보세요!</p>
+  <div class="container">
+    <div class="refresh-area" id="refreshArea">
+      <div class="loading-icon" id="loadingIcon"></div>
+    </div>
+    <div class="content">
+      <h1>유튜브 스타일 당겨서 새로고침</h1>
+    </div>
   </div>
   <script>
     let startY = 0;
     let pullAmount = 0;
-    const threshold = 80;
-    const refreshBar = document.getElementById("refreshBar");
-    const refreshText = document.getElementById("refreshText");
-    const spinner = document.getElementById("spinner");
-
+    const threshold = 120;
+    const refreshArea = document.getElementById("refreshArea");
+    const loadingIcon = document.getElementById("loadingIcon");
+    
     document.addEventListener("touchstart", (e) => {
       if (window.scrollY === 0) {
         startY = e.touches[0].clientY;
       }
     });
-
+    
     document.addEventListener("touchmove", (e) => {
       if (window.scrollY === 0) {
         pullAmount = e.touches[0].clientY - startY;
         if (pullAmount > 0) {
-          refreshBar.style.transform = `translateY(${Math.min(pullAmount, threshold)}px)`;
-          refreshText.textContent = pullAmount > threshold ? "놓아서 새로고침" : "당겨서 새로고침";
+          refreshArea.style.height = `${Math.min(pullAmount, threshold)}px`;
+          loadingIcon.style.opacity = pullAmount > threshold * 0.7 ? "1" : "0.5";
         }
       }
     });
-
+    
     document.addEventListener("touchend", () => {
       if (pullAmount > threshold) {
-        refreshBar.style.transform = "translateY(60px)";
-        refreshText.style.display = "none";
-        spinner.style.display = "block";
+        refreshArea.style.height = "100px";
+        loadingIcon.style.opacity = "1";
         setTimeout(() => {
           location.reload();
         }, 1000);
       } else {
-        refreshBar.style.transform = "translateY(-60px)";
+        refreshArea.style.height = "0px";
+        loadingIcon.style.opacity = "0";
       }
       pullAmount = 0;
     });
