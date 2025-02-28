@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA 풀스크린 웹</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { display: flex; align-items: center; justify-content: center; height: 100vh; background: #222; color: white; flex-direction: column; text-align: center; }
+        #progress-bar { position: absolute; top: 0; left: 0; width: 0%; height: 4px; background: lime; transition: width 1s; }
+        button { padding: 15px 30px; font-size: 18px; margin-top: 20px; background: #444; color: white; border: none; cursor: pointer; border-radius: 5px; }
+        button:hover { background: #666; }
+    </style>
+</head>
+<body>
+
+    <div id="progress-bar"></div>
+    
+    <h1>PWA 풀스크린 웹</h1>
+    <button id="reload-btn">새로고침</button>
+
+    <script>
+        // ✅ Service Worker 등록
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("sw.js")
+                .then(() => console.log("Service Worker 등록 완료"))
+                .catch(err => console.log("Service Worker 등록 실패:", err));
+        }
+
+        // ✅ 새로고침 버튼 클릭 시 로딩바 표시
+        document.getElementById("reload-btn").addEventListener("click", () => {
+            let progressBar = document.getElementById("progress-bar");
+            progressBar.style.width = "50%";
+
+            setTimeout(() => {
+                progressBar.style.width = "100%";
+                setTimeout(() => {
+                    progressBar.style.width = "0%"; // 숨김
+                    location.reload(); // 새로고침
+                }, 500);
+            }, 1000);
+        });
+    </script>
+
+</body>
+</html>
