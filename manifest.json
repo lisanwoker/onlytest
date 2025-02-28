@@ -1,7 +1,7 @@
 {
     "name": "PWA Example",
     "short_name": "PWA",
-    "start_url": "/",
+    "start_url": "/onlytest/index.html",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#000000",
