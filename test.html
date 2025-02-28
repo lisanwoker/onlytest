@@ -22,6 +22,7 @@
       align-items: center;
       font-size: 14px;
       color: #555;
+      overflow: hidden;
       transition: height 0.3s ease;
     }
     .spinner {
@@ -83,6 +84,7 @@
 
     document.addEventListener("touchend", () => {
       if (pullAmount > threshold) {
+        refreshBar.style.height = "50px";
         refreshText.style.display = "none";
         spinner.style.display = "block";
         setTimeout(() => {
