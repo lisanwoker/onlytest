@@ -24,6 +24,23 @@
       color: #555;
       transition: height 0.3s ease;
     }
+    .spinner {
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(0, 0, 0, 0.2);
+      border-top: 3px solid #555;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      display: none;
+    }
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
     .content {
       min-height: 100vh;
       background-color: white;
@@ -32,7 +49,10 @@
   </style>
 </head>
 <body>
-  <div class="refresh-bar" id="refreshBar">당겨서 새로고침</div>
+  <div class="refresh-bar" id="refreshBar">
+    <div class="spinner" id="spinner"></div>
+    <span id="refreshText">당겨서 새로고침</span>
+  </div>
   <div class="content">
     <h1>당겨서 새로고침 구현</h1>
     <p>페이지를 아래로 당겨보세요!</p>
@@ -42,6 +62,8 @@
     let pullAmount = 0;
     const threshold = 100;
     const refreshBar = document.getElementById("refreshBar");
+    const refreshText = document.getElementById("refreshText");
+    const spinner = document.getElementById("spinner");
 
     document.addEventListener("touchstart", (e) => {
       if (window.scrollY === 0) {
@@ -54,17 +76,18 @@
         pullAmount = e.touches[0].clientY - startY;
         if (pullAmount > 0) {
           refreshBar.style.height = Math.min(pullAmount, threshold) + "px";
-          refreshBar.textContent = pullAmount > threshold ? "놓아서 새로고침" : "당겨서 새로고침";
+          refreshText.textContent = pullAmount > threshold ? "놓아서 새로고침" : "당겨서 새로고침";
         }
       }
     });
 
     document.addEventListener("touchend", () => {
       if (pullAmount > threshold) {
-        refreshBar.textContent = "새로고침 중...";
+        refreshText.style.display = "none";
+        spinner.style.display = "block";
         setTimeout(() => {
           location.reload();
-        }, 800);
+        }, 1000);
       } else {
         refreshBar.style.height = "0px";
       }
