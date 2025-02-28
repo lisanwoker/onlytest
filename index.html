@@ -7,13 +7,13 @@
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="styles.css">
     <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function () {
-                navigator.serviceWorker.register('/service-worker.js')
-                    .then(reg => console.log("Service Worker registered!", reg))
-                    .catch(err => console.log("Service Worker registration failed: ", err));
-            });
-        }
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/repository-name/service-worker.js')
+            .then(reg => console.log("Service Worker registered!", reg))
+            .catch(err => console.log("Service Worker registration failed:", err));
+    });
+}
     </script>
 </head>
 <body>
